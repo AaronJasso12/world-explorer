@@ -1,0 +1,191 @@
+<section class="mx-4">
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold">
+      {{ country().name }}
+    </h1>
+
+    <p class="text-lg opacity-70">
+      {{ country().nameOficial }}
+    </p>
+
+    <div class="mt-2 flex gap-2">
+      <span class="badge badge-primary">
+        {{ country().region }}
+      </span>
+
+      <span class="badge badge-outline">
+        {{ country().subRegion }}
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- Bandera y Carrusel -->
+<section class="grid grid-cols-1 lg:grid-cols-6 gap-6 items-stretch">
+  <!-- Bandera -->
+  <div class="lg:col-span-2 flex items-center justify-center">
+    <div class="hover-3d w-full">
+      <!-- content -->
+      <figure class="rounded-2xl overflow-hidden bg-base-200 p-4">
+        <img
+          [alt]="'Bandera de ' + country().name"
+          [src]="country().flagSvg"
+          class="w-full object-contain"
+        />
+      </figure>
+      <!-- 8 empty divs needed for the 3D effect -->
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Carrusel -->
+  <div class="lg:col-span-4 min-w-0">
+    <div class="carousel-container h-full rounded-2xl overflow-hidden">
+
+      @if (currentImg(); as img) {
+        <div class="relative h-full min-h-72">
+
+          <img
+            [src]="img.urlImg"
+            [alt]="img.descripcion || 'Fotografía de ' + country().name"
+            class="w-full h-full min-h-72 max-h-120 object-cover"
+          />
+
+          <!-- Flechas de navegación -->
+          @if (imgsUrl().length > 1) {
+            <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between items-center px-3">
+              <button
+                type="button"
+                class="btn btn-circle"
+                aria-label="Fotografía anterior"
+                (click)="previousImg()"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path fill="currentColor" d="M13.939 4.939L6.879 12l7.06 7.061l2.122-2.122L11.121 12l4.94-4.939z" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-circle"
+                aria-label="Fotografía siguiente"
+                (click)="nextImg()"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path fill="currentColor" d="M10.061 19.061L17.121 12l-7.06-7.061l-2.122 2.122L12.879 12l-4.94 4.939z" />
+                </svg>
+              </button>
+            </div>
+          }
+
+          <!-- Contador de fotografías -->
+          <div class="absolute bottom-3 right-3 badge badge-neutral badge-lg">
+            {{ currentImgIndex() + 1 }} / {{ imgsUrl().length }}
+          </div>
+
+          <div class="absolute bottom-0 inset-x-0 bg-black/40 text-white p-3 flex flex-wrap justify-between items-center gap-2">
+            <span class="text-sm">
+              Foto de
+              <a
+                [href]="img.autorUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline font-semibold"
+              >
+                {{ img.autor }}
+              </a>
+              en
+              <a
+                [href]="img.urlOficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline"
+              >
+                Unsplash
+              </a>
+            </span>
+          </div>
+        </div>
+      } @else {
+        <div class="flex items-center justify-center min-h-72 rounded-2xl bg-base-200">
+          <p class="text-base-content/60">
+            No hay fotografías disponibles
+          </p>
+        </div>
+      }
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="stats stats-vertical mt-8 w-full shadow lg:stats-horizontal">
+  <div class="stat place-items-center">
+    <div class="stat-title">Población</div>
+    <div class="stat-value">{{ country().population | number }}</div>
+  </div>
+
+  <div class="stat place-items-center">
+    <div class="stat-title">Capital</div>
+    <div class="stat-value text-secondary">{{ country().capital }}</div>
+  </div>
+
+  <div class="stat place-items-center">
+    <div class="stat-title">Área</div>
+    <div class="stat-value">{{ country().area | number}} km²</div>
+  </div>
+
+  <div class="stat place-items-center">
+    <div class="stat-title">Idioma</div>
+    <div class="stat-value capitalize">{{ country().idioma }}</div>
+  </div>
+</section>
+
+<section class="card bg-base-200 shadow-xl my-8">
+  <div class="card-body">
+    <h2 class="card-title">
+      Sobre {{ country().name }}
+    </h2>
+
+    <p class="leading-relaxed opacity-80">
+      {{ country().descripcion }}
+    </p>
+
+    <div class="card-actions justify-end">
+      <a [href]="country().link"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-outline"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 256 367"
+        >
+          <path d="M0 0h256v367H0z" fill="none" />
+          <path fill="#34a853" d="M70.585 271.865a371 371 0 0 1 28.911 42.642c7.374 13.982 10.448 23.463 15.837 40.31c3.305 9.308 6.292 12.086 12.714 12.086c6.998 0 10.173-4.726 12.626-12.035c5.094-15.91 9.091-28.052 15.397-39.525c12.374-22.15 27.75-41.833 42.858-60.75c4.09-5.354 30.534-36.545 42.439-61.156c0 0 14.632-27.035 14.632-64.792c0-35.318-14.43-59.813-14.43-59.813l-41.545 11.126l-25.23 66.451l-6.242 9.163l-1.248 1.66l-1.66 2.078l-2.914 3.319l-4.164 4.163l-22.467 18.304l-56.17 32.432z" />
+          <path fill="#fbbc04" d="M12.612 188.892c13.709 31.313 40.145 58.839 58.031 82.995l95.001-112.534s-13.384 17.504-37.662 17.504c-27.043 0-48.89-21.595-48.89-48.825c0-18.673 11.234-31.501 11.234-31.501l-64.489 17.28z" />
+          <path fill="#4285f4" d="M166.705 5.787c31.552 10.173 58.558 31.53 74.893 63.023l-75.925 90.478s11.234-13.06 11.234-31.617c0-27.864-23.463-48.68-48.81-48.68c-23.969 0-37.735 17.475-37.735 17.475v-57z" />
+          <path fill="#1a73e8" d="M30.015 45.765C48.86 23.218 82.02 0 127.736 0c22.18 0 38.89 5.823 38.89 5.823L90.29 96.516H36.205z" />
+          <path fill="#ea4335" d="M12.612 188.892S0 164.194 0 128.414c0-33.817 13.146-63.377 30.015-82.649l60.318 50.759z" />
+        </svg>
+
+        Ver en Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+
